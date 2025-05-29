@@ -2,14 +2,14 @@ import express from 'express'
 import { CONNECT_DB, CLOSE_DB } from '~/config/mongodb.js'
 import exitHook from 'async-exit-hook'
 import { env } from '~/config/environment.js'
+import { APIs_V1 } from './routes/v1'
 
 const START_SERVER = () => {
   const app = express()
-
-  app.get('/', async (_req, res) => {
-    console.log(env)
-    res.end('<h1>Hello World!</h1><hr>')
-  })
+//bật req.body json data
+  app.use(express.json())
+//dùng API v1
+  app.use('/v1', APIs_V1)
 
   app.listen(env.APP_PORT, env.APP_HOST, () => {
     // eslint-disable-next-line no-console

@@ -104,4 +104,58 @@ src
   ```
 
 
-## 4.   
+## 4. API với Express Router
+(50,51)
+1. Thư viện cần cài   
+  ```javascript
+  
+    yarn add http-status-codes@"^2.3.0 //sử dụng mã trạng thái HTTP thay vì nhớ số mã 
+  ```
+  - Các mã phổ biến: 
+    StatusCodes.OK                   // 200
+    StatusCodes.CREATED              // 201
+    StatusCodes.BAD_REQUEST          // 400
+    StatusCodes.UNAUTHORIZED         // 401
+    StatusCodes.FORBIDDEN            // 403
+    StatusCodes.NOT_FOUND            // 404
+    StatusCodes.INTERNAL_SERVER_ERROR // 500
+2. Truyền dữ liệu giữa các file
+  server->v1(boardRoutes->index)
+``` javascript
+    export const BoardRoutes = Router
+    import { BoardRoutes } from '~/routes/v1/boardRoutes.js'
+```
+## 5. Code tầng Validation dùng Joi
+(52)
+1. Thư viện cần cài
+  ```javascript
+     yarn add joi@17.10.2
+  ```
+2. Các thông báo lỗi tùy chỉnh cho việc xác thực
+  ```javascript
+   const CorrectCondition = Joi.object({
+    title: Joi.string().required().min(3).max(50).trim().strict().messages({
+        // Các thông báo lỗi tùy chỉnh cho các quy tắc xác thực
+      'string.trim': 'Title must not have leading or trailing spaces',
+      'string.empty': 'Title cannot be empty',
+      'string.min': 'Title must be at least 3 characters long',
+      'string.max': 'Title must not exceed 50 characters',
+      'any.required': 'Title is required'
+    }),
+    description: Joi.string().required().min(3).max(250).trim().strict(),
+  })
+  ```
+3. Chỉ định abortEarly: false để trả về tất cả các lỗi validation
+  ```javascript
+    await CorrectCondition.validateAsync(req.body, { abortEarly: false })
+  ```
+4.bật req.body json data trong file server.json
+```javascript
+  app.use(express.json())
+```
+
+## 6. Code tầng Controller 
+
+
+
+  
